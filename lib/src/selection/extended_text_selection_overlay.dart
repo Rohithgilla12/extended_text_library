@@ -53,8 +53,7 @@ class ExtendedTextSelectionOverlay {
         'No Overlay widget exists above $context.\n'
         'Usually the Navigator created by WidgetsApp provides the overlay. Perhaps your '
         'app content was created above the Navigator with the WidgetsApp builder parameter.');
-    _toolbarController =
-        AnimationController(duration: fadeDuration, vsync: overlay!);
+    _toolbarController = AnimationController(duration: fadeDuration, vsync: overlay!);
   }
 
   /// The context in which the selection handles should appear.
@@ -173,9 +172,8 @@ class ExtendedTextSelectionOverlay {
     _handlesVisible = visible;
     // If we are in build state, it will be too late to update visibility.
     // We will need to schedule the build in next frame.
-    if (SchedulerBinding.instance!.schedulerPhase ==
-        SchedulerPhase.persistentCallbacks) {
-      SchedulerBinding.instance!.addPostFrameCallback(_markNeedsBuild);
+    if (SchedulerBinding.instance.schedulerPhase == SchedulerPhase.persistentCallbacks) {
+      SchedulerBinding.instance.addPostFrameCallback(_markNeedsBuild);
     } else {
       _markNeedsBuild();
     }
@@ -186,15 +184,10 @@ class ExtendedTextSelectionOverlay {
     if (_handles != null) return;
 
     _handles = <OverlayEntry>[
-      OverlayEntry(
-          builder: (BuildContext context) =>
-              _buildHandle(context, _TextSelectionHandlePosition.start)),
-      OverlayEntry(
-          builder: (BuildContext context) =>
-              _buildHandle(context, _TextSelectionHandlePosition.end)),
+      OverlayEntry(builder: (BuildContext context) => _buildHandle(context, _TextSelectionHandlePosition.start)),
+      OverlayEntry(builder: (BuildContext context) => _buildHandle(context, _TextSelectionHandlePosition.end)),
     ];
-    Overlay.of(context, rootOverlay: true, debugRequiredFor: debugRequiredFor)!
-        .insertAll(_handles!);
+    Overlay.of(context, rootOverlay: true, debugRequiredFor: debugRequiredFor)!.insertAll(_handles!);
   }
 
   /// Destroys the handles by removing them from overlay.
@@ -210,8 +203,7 @@ class ExtendedTextSelectionOverlay {
   void showToolbar() {
     assert(_toolbar == null);
     _toolbar = OverlayEntry(builder: _buildToolbar);
-    Overlay.of(context, rootOverlay: true, debugRequiredFor: debugRequiredFor)!
-        .insert(_toolbar!);
+    Overlay.of(context, rootOverlay: true, debugRequiredFor: debugRequiredFor)!.insert(_toolbar!);
     _toolbarController.forward(from: 0.0);
   }
 
@@ -227,9 +219,8 @@ class ExtendedTextSelectionOverlay {
   void update(TextEditingValue newValue) {
     if (_value == newValue) return;
     _value = newValue;
-    if (SchedulerBinding.instance!.schedulerPhase ==
-        SchedulerPhase.persistentCallbacks) {
-      SchedulerBinding.instance!.addPostFrameCallback(_markNeedsBuild);
+    if (SchedulerBinding.instance.schedulerPhase == SchedulerPhase.persistentCallbacks) {
+      SchedulerBinding.instance.addPostFrameCallback(_markNeedsBuild);
     } else {
       _markNeedsBuild();
     }
@@ -285,13 +276,10 @@ class ExtendedTextSelectionOverlay {
     _toolbarController.dispose();
   }
 
-  Widget _buildHandle(
-      BuildContext context, _TextSelectionHandlePosition position) {
+  Widget _buildHandle(BuildContext context, _TextSelectionHandlePosition position) {
     final Widget handle;
     final TextSelectionControls? selectionControls = this.selectionControls;
-    if ((_selection.isCollapsed &&
-            position == _TextSelectionHandlePosition.end) ||
-        selectionControls == null)
+    if ((_selection.isCollapsed && position == _TextSelectionHandlePosition.end) || selectionControls == null)
       handle = Container(); // hide the second handle when collapsed
     else {
       handle = Visibility(
@@ -321,8 +309,7 @@ class ExtendedTextSelectionOverlay {
     if (selectionControls == null) return Container();
 
     // Find the horizontal midpoint, just above the selected text.
-    final List<TextSelectionPoint>? endpoints =
-        renderObject.getEndpointsForSelection(_selection);
+    final List<TextSelectionPoint>? endpoints = renderObject.getEndpointsForSelection(_selection);
     if (endpoints == null || endpoints.isEmpty) {
       return Container();
     }
@@ -332,15 +319,11 @@ class ExtendedTextSelectionOverlay {
       renderObject.localToGlobal(renderObject.size.bottomRight(Offset.zero)),
     );
 
-    final bool isMultiline =
-        endpoints.last.point.dy - endpoints.first.point.dy >
-            renderObject.preferredLineHeight / 2;
+    final bool isMultiline = endpoints.last.point.dy - endpoints.first.point.dy > renderObject.preferredLineHeight / 2;
 
     // If the selected text spans more than 1 line, horizontally center the toolbar.
     // Derived from both iOS and Android.
-    final double midX = isMultiline
-        ? editingRegion.width / 2
-        : (endpoints.first.point.dx + endpoints.last.point.dx) / 2;
+    final double midX = isMultiline ? editingRegion.width / 2 : (endpoints.first.point.dx + endpoints.last.point.dx) / 2;
 
     final Offset midpoint = Offset(
       midX,
@@ -375,8 +358,7 @@ class ExtendedTextSelectionOverlay {
     );
   }
 
-  void _handleSelectionHandleChanged(
-      TextSelection newSelection, _TextSelectionHandlePosition position) {
+  void _handleSelectionHandleChanged(TextSelection newSelection, _TextSelectionHandlePosition position) {
     final TextPosition textPosition;
     switch (position) {
       case _TextSelectionHandlePosition.start:
@@ -422,8 +404,7 @@ class _TextSelectionHandleOverlay extends StatefulWidget {
   final TextSelectionDelegate selectionDelegate;
 
   @override
-  _TextSelectionHandleOverlayState createState() =>
-      _TextSelectionHandleOverlayState();
+  _TextSelectionHandleOverlayState createState() => _TextSelectionHandleOverlayState();
 
   ValueListenable<bool> get _visibility {
     switch (position) {
@@ -435,9 +416,7 @@ class _TextSelectionHandleOverlay extends StatefulWidget {
   }
 }
 
-class _TextSelectionHandleOverlayState
-    extends State<_TextSelectionHandleOverlay>
-    with SingleTickerProviderStateMixin {
+class _TextSelectionHandleOverlayState extends State<_TextSelectionHandleOverlay> with SingleTickerProviderStateMixin {
   late Offset _dragPosition;
 
   late AnimationController _controller;
@@ -447,8 +426,7 @@ class _TextSelectionHandleOverlayState
   void initState() {
     super.initState();
 
-    _controller = AnimationController(
-        duration: TextSelectionOverlay.fadeDuration, vsync: this);
+    _controller = AnimationController(duration: const Duration(milliseconds: 200), vsync: this);
 
     _handleVisibilityChanged();
     widget._visibility.addListener(_handleVisibilityChanged);
@@ -486,13 +464,11 @@ class _TextSelectionHandleOverlayState
 
   void _handleDragUpdate(DragUpdateDetails details) {
     _dragPosition += details.delta;
-    TextPosition position =
-        widget.renderObject.getPositionForPoint(_dragPosition);
+    TextPosition position = widget.renderObject.getPositionForPoint(_dragPosition);
 
     ///zmt
     if (widget.renderObject.hasSpecialInlineSpanBase) {
-      position = convertTextPainterPostionToTextInputPostion(
-          widget.renderObject.text!, position)!;
+      position = convertTextPainterPostionToTextInputPostion(widget.renderObject.text!, position)!;
     }
 
     if (widget.selection.isCollapsed) {
@@ -516,8 +492,7 @@ class _TextSelectionHandleOverlayState
         break;
     }
 
-    if (newSelection.baseOffset >= newSelection.extentOffset)
-      return; // don't allow order swapping.
+    if (newSelection.baseOffset >= newSelection.extentOffset) return; // don't allow order swapping.
 
     widget.onSelectionHandleChanged(newSelection);
   }
@@ -573,28 +548,20 @@ class _TextSelectionHandleOverlayState
     Rect? startHandleRect;
     Rect? endHandleRect;
 
-    if (prevText == currText &&
-        selection != null &&
-        selection.isValid &&
-        !selection.isCollapsed) {
+    if (prevText == currText && selection != null && selection.isValid && !selection.isCollapsed) {
       final String selectedGraphemes = selection.textInside(currText);
       firstSelectedGraphemeExtent = selectedGraphemes.characters.first.length;
       lastSelectedGraphemeExtent = selectedGraphemes.characters.last.length;
-      assert(firstSelectedGraphemeExtent <= selectedGraphemes.length &&
-          lastSelectedGraphemeExtent <= selectedGraphemes.length);
-      startHandleRect = widget.renderObject.getRectForComposingRange(TextRange(
-          start: selection.start,
-          end: selection.start + firstSelectedGraphemeExtent));
-      endHandleRect = widget.renderObject.getRectForComposingRange(TextRange(
-          start: selection.end - lastSelectedGraphemeExtent,
-          end: selection.end));
+      assert(firstSelectedGraphemeExtent <= selectedGraphemes.length && lastSelectedGraphemeExtent <= selectedGraphemes.length);
+      startHandleRect = widget.renderObject.getRectForComposingRange(TextRange(start: selection.start, end: selection.start + firstSelectedGraphemeExtent));
+      endHandleRect = widget.renderObject.getRectForComposingRange(TextRange(start: selection.end - lastSelectedGraphemeExtent, end: selection.end));
     }
 
     final Offset handleAnchor = widget.selectionControls.getHandleAnchor(
       type,
       widget.renderObject.preferredLineHeight,
-      startHandleRect?.height ?? widget.renderObject.preferredLineHeight,
-      endHandleRect?.height ?? widget.renderObject.preferredLineHeight,
+      // startHandleRect?.height ?? widget.renderObject.preferredLineHeight,
+      // endHandleRect?.height ?? widget.renderObject.preferredLineHeight,
     );
     final Size handleSize = widget.selectionControls.getHandleSize(
       widget.renderObject.preferredLineHeight,
@@ -609,8 +576,7 @@ class _TextSelectionHandleOverlayState
 
     // Make sure the GestureDetector is big enough to be easily interactive.
     final Rect interactiveRect = handleRect.expandToInclude(
-      Rect.fromCircle(
-          center: handleRect.center, radius: kMinInteractiveDimension / 2),
+      Rect.fromCircle(center: handleRect.center, radius: kMinInteractiveDimension / 2),
     );
     final RelativeRect padding = RelativeRect.fromLTRB(
       math.max((interactiveRect.width - handleRect.width) / 2, 0),
@@ -646,10 +612,8 @@ class _TextSelectionHandleOverlayState
                 type,
                 widget.renderObject.preferredLineHeight,
                 widget.onSelectionHandleTapped,
-                startHandleRect?.height ??
-                    widget.renderObject.preferredLineHeight,
-                endHandleRect?.height ??
-                    widget.renderObject.preferredLineHeight,
+                // startHandleRect?.height ?? widget.renderObject.preferredLineHeight,
+                // endHandleRect?.height ?? widget.renderObject.preferredLineHeight,
               ),
             ),
           ),

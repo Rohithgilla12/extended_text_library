@@ -74,8 +74,7 @@ class ExtendedTextSelectionGestureDetectorBuilder {
       renderEditable.lastSecondaryTapDownPosition!,
     );
 
-    return renderEditable.selection!.base.offset <= textPosition.offset &&
-        renderEditable.selection!.extent.offset >= textPosition.offset;
+    return renderEditable.selection!.base.offset <= textPosition.offset && renderEditable.selection!.extent.offset >= textPosition.offset;
   }
 
   final Function showToolbar;
@@ -94,8 +93,7 @@ class ExtendedTextSelectionGestureDetectorBuilder {
   /// The [RenderObject] of the [EditableText] for which the builder will
   /// provide a [TextSelectionGestureDetector].
   @protected
-  ExtendedTextSelectionRenderObject get renderEditable =>
-      delegate.renderEditable;
+  ExtendedTextSelectionRenderObject get renderEditable => delegate.renderEditable;
 
   /// Handler for [TextSelectionGestureDetector.onTapDown].
   ///
@@ -113,9 +111,7 @@ class ExtendedTextSelectionGestureDetectorBuilder {
     // trigger the selection overlay.
     // For backwards-compatibility, we treat a null kind the same as touch.
     final PointerDeviceKind? kind = details.kind;
-    shouldShowSelectionToolbar = kind == null ||
-        kind == PointerDeviceKind.touch ||
-        kind == PointerDeviceKind.stylus;
+    shouldShowSelectionToolbar = kind == null || kind == PointerDeviceKind.touch || kind == PointerDeviceKind.stylus;
   }
 
   /// Handler for [TextSelectionGestureDetector.onForcePressStart].
@@ -307,9 +303,7 @@ class ExtendedTextSelectionGestureDetectorBuilder {
       return;
     }
     final PointerDeviceKind? kind = details.kind;
-    shouldShowSelectionToolbar = kind == null ||
-        kind == PointerDeviceKind.touch ||
-        kind == PointerDeviceKind.stylus;
+    shouldShowSelectionToolbar = kind == null || kind == PointerDeviceKind.touch || kind == PointerDeviceKind.stylus;
     renderEditable.selectPositionAt(
       from: details.globalPosition,
       cause: SelectionChangedCause.drag,
@@ -325,8 +319,7 @@ class ExtendedTextSelectionGestureDetectorBuilder {
   ///  * [TextSelectionGestureDetector.onDragSelectionUpdate], which triggers
   ///    this callback./lib/src/material/text_field.dart
   @protected
-  void onDragSelectionUpdate(
-      DragStartDetails startDetails, DragUpdateDetails updateDetails) {
+  void onDragSelectionUpdate(DragStartDetails startDetails, DragUpdateDetails updateDetails) {
     if (!delegate.selectionEnabled) {
       return;
     }
@@ -381,8 +374,7 @@ class ExtendedTextSelectionGestureDetectorBuilder {
   }
 }
 
-class CommonTextSelectionGestureDetectorBuilder
-    extends ExtendedTextSelectionGestureDetectorBuilder {
+class CommonTextSelectionGestureDetectorBuilder extends ExtendedTextSelectionGestureDetectorBuilder {
   CommonTextSelectionGestureDetectorBuilder({
     required ExtendedTextSelectionGestureDetectorBuilderDelegate delegate,
     required Function showToolbar,
